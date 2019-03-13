@@ -34,4 +34,4 @@ To contribute to IPFS in general, see the [contributing guide](https://github.co
 
 
 [`ipfs-cluster-ctl`]: https://cluster.ipfs.io/documentation/ipfs-cluster-ctl/
-[`pin-to-cluster.sh`]: scripts/pin-to-cluster.sh
+[`entrypoint.sh`]: scripts/pin-to-cluster.sh
