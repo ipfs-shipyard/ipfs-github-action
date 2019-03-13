@@ -11,4 +11,4 @@ LABEL com.github.actions.icon="box"
 LABEL com.github.actions.color="blue"
 
 COPY "entrypoint.sh" "/entrypoint.sh"
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
