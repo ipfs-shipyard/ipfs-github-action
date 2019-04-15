@@ -49,7 +49,7 @@ root_cid=$(ipfs-cluster-ctl \
     --name "$PIN_NAME" \
     --recursive $INPUT_DIR )
 
-preview_url=https://ipfs.io/ipfs/$root_cid
+preview_url=https://cluster.ipfs.io/ipfs/$root_cid
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
 
