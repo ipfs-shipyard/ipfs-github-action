@@ -1,4 +1,4 @@
-FROM olizilla/ipfs-dns-deploy:1.1
+FROM olizilla/ipfs-dns-deploy:latest
 
 LABEL version="1.0.0"
 LABEL repository="http://github.com/ipfs-shipyard/ipfs-action"
