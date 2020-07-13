@@ -1,30 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-# if [[ $# -lt 5 ]] ; then
-#   echo 'Usage:'
-#   echo 'GITHUB_REPOSITORY="ipfs-shipyard/ipld-explorer" \'
-#   echo 'GITHUB_SHA="bf3aae3bc98666fbf459b03ab2d87a97505bfab0" \'
-#   echo 'GITHUB_TOKEN="_secret" \'
-#   echo './entrypoint.sh <input root dir to pin recursivly> <cluster_user> <cluster_password> <cluster_host> <ipfs_gateway>'
-#   exit 1
-# fi
-
-
-# INPUT_DIR=$(sh -c "echo $1")
-# CLUSTER_USER=$2
-# CLUSTER_PASSWORD=$3
-# CLUSTER_HOST=$4
-# IPFS_GATEWAY=$5
+# Interpolate env vars in the $INPUT_PATH_TO_ADD, see: https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#entrypoint
+# This handles situation where user provides path to add as $GITHUB_WORKSPACE/some/path
+INPUT_DIR=$(sh -c "echo $INPUT_PATH_TO_ADD")
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
 
-# interpolate env vars in the $INPUT_PATH_TO_ADD, see: https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#entrypoint
-INPUT_DIR=$(sh -c "echo $INPUT_PATH_TO_ADD")
 echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
-echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
-echo "GITHUB_REPOSITORY is $GITHUB_REPOSITORY"
-echo "pwd $(pwd)"
-ls -la "$INPUT_DIR"
 
 update_github_status () {
   # only try and update the satus if we have a github token
@@ -50,17 +32,6 @@ update_github_status () {
 
 update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
 
-# check command works
-ipfs-cluster-ctl
-
-# ipfs-cluster-ctl \
-#     --host $INPUT_CLUSTER_HOST \
-#     --basic-auth $INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD \
-#     add \
-#     --quieter \
-#     --name "$PIN_NAME" \
-#     --recursive $INPUT_DIR
-
 # pin to cluster
 root_cid=$(ipfs-cluster-ctl \
     --host "$INPUT_CLUSTER_HOST" \
@@ -73,5 +44,7 @@ root_cid=$(ipfs-cluster-ctl \
 preview_url="$INPUT_IPFS_GATEWAY/ipfs/$root_cid"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
+
+echo "Pinned to IPFS - $preview_url"
 
 echo "::set-output name=cid::$root_cid"
