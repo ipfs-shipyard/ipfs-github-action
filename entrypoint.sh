@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+echo "Pinning $1 to $CLUSTER_HOST"
+
 if [[ $# -eq 0 ]] ; then
   echo 'Usage:'
   echo 'CLUSTER_USER="who" \'
