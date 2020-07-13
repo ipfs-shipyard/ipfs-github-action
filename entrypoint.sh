@@ -1,24 +1,25 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ $# -lt 5 ]] ; then
-  echo 'Usage:'
-  echo 'GITHUB_REPOSITORY="ipfs-shipyard/ipld-explorer" \'
-  echo 'GITHUB_SHA="bf3aae3bc98666fbf459b03ab2d87a97505bfab0" \'
-  echo 'GITHUB_TOKEN="_secret" \'
-  echo './entrypoint.sh <input root dir to pin recursivly> <cluster_user> <cluster_password> <cluster_host> <ipfs_gateway>'
-  exit 1
-fi
+# if [[ $# -lt 5 ]] ; then
+#   echo 'Usage:'
+#   echo 'GITHUB_REPOSITORY="ipfs-shipyard/ipld-explorer" \'
+#   echo 'GITHUB_SHA="bf3aae3bc98666fbf459b03ab2d87a97505bfab0" \'
+#   echo 'GITHUB_TOKEN="_secret" \'
+#   echo './entrypoint.sh <input root dir to pin recursivly> <cluster_user> <cluster_password> <cluster_host> <ipfs_gateway>'
+#   exit 1
+# fi
 
 # interpolate env vars in the path, see: 
-INPUT_DIR=$(sh -c "echo $1")
-CLUSTER_USER=$2
-CLUSTER_PASSWORD=$3
-CLUSTER_HOST=$4
-IPFS_GATEWAY=$5
+# INPUT_DIR=$(sh -c "echo $1")
+# CLUSTER_USER=$2
+# CLUSTER_PASSWORD=$3
+# CLUSTER_HOST=$4
+# IPFS_GATEWAY=$5
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
 
-echo "Pinning $INPUT_DIR to $CLUSTER_HOST"
+INPUT_DIR="$INPUT_PATH_TO_ADD"
+echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 echo "GITHUB_REPOSITORY is $GITHUB_REPOSITORY"
 echo "pwd $(pwd)"
@@ -46,29 +47,29 @@ update_github_status () {
   curl --silent --output /dev/null -X POST -H "Authorization: token $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
-update_github_status "pending" "Pinnning to IPFS cluster" "$IPFS_GATEWAY"
+update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
 
 # check command works
 ipfs-cluster-ctl
 
-ipfs-cluster-ctl \
-    --host $CLUSTER_HOST \
-    --basic-auth $CLUSTER_USER:$CLUSTER_PASSWORD \
-    add \
-    --quieter \
-    --name "$PIN_NAME" \
-    --recursive $INPUT_DIR
+# ipfs-cluster-ctl \
+#     --host $INPUT_CLUSTER_HOST \
+#     --basic-auth $INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD \
+#     add \
+#     --quieter \
+#     --name "$PIN_NAME" \
+#     --recursive $INPUT_DIR
 
 # pin to cluster
 root_cid=$(ipfs-cluster-ctl \
-    --host $HOST \
-    --basic-auth $CLUSTER_USER:$CLUSTER_PASSWORD \
+    --host "$INPUT_CLUSTER_HOST" \
+    --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
     add \
     --quieter \
     --name "$PIN_NAME" \
-    --recursive $INPUT_DIR )
+    --recursive "$INPUT_DIR" )
 
-preview_url="$IPFS_GATEWAY/ipfs/$root_cid"
+preview_url="$INPUT_IPFS_GATEWAY/ipfs/$root_cid"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
 
