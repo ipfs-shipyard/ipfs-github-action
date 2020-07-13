@@ -24,7 +24,7 @@ echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 echo "GITHUB_REPOSITORY is $GITHUB_REPOSITORY"
 echo "pwd $(pwd)"
-ls -la "$1"
+ls -la "$INPUT_DIR"
 
 update_github_status () {
   # only try and update the satus if we have a github token
