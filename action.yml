@@ -19,6 +19,10 @@ inputs:
     description: 'Multiaddr for the IPFS Cluster'
     default: '/dnsaddr/cluster.ipfs.io'
     required: true
+  ipfs_gateway:
+    description: 'IPFS Gateway to use for preview url'
+    default: 'https://ipfs.io'
+    required: true
 outputs:
   cid:
     description: 'The IPFS Content ID for the directory'

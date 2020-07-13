@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Pinning $1 to $CLUSTER_HOST"
-echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
-echo "pwd $(pwd)"
-ls -la "$1"
-
-if [[ $# -eq 0 ]] ; then
+if [[ $# -lt 5 ]] ; then
   echo 'Usage:'
-  echo 'CLUSTER_USER="who" \'
-  echo 'CLUSTER_PASSWORD="_secret_" \'
-  echo 'CLUSTER_HOST="/dnsaddr/cluster.ipfs.io" \'
-  echo 'IPFS_GATEWAY="https://ipfs.io"'
   echo 'GITHUB_REPOSITORY="ipfs-shipyard/ipld-explorer" \'
   echo 'GITHUB_SHA="bf3aae3bc98666fbf459b03ab2d87a97505bfab0" \'
   echo 'GITHUB_TOKEN="_secret" \'
-  echo './entrypoint.sh <input root dir to pin recursivly>'
+  echo './entrypoint.sh <input root dir to pin recursivly> <cluster_user> <cluster_password> <cluster_host> <ipfs_gateway>'
   exit 1
 fi
 
-INPUT_DIR=$1
+# interpolate env vars in the path, see: 
+INPUT_DIR=$(sh -c "echo $1")
+CLUSTER_USER=$2
+CLUSTER_PASSWORD=$3
+CLUSTER_HOST=$4
+IPFS_GATEWAY=$5
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
-HOST=${CLUSTER_HOST:-"/dnsaddr/cluster.ipfs.io"}
-GATEWAY_URL=${IPFS_GATEWAY:-"https://ipfs.io"}
+
+echo "Pinning $INPUT_DIR to $CLUSTER_HOST"
+echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
+echo "GITHUB_REPOSITORY is $GITHUB_REPOSITORY"
+echo "pwd $(pwd)"
+ls -la "$1"
 
 update_github_status () {
   # only try and update the satus if we have a github token
@@ -46,13 +46,13 @@ update_github_status () {
   curl --silent --output /dev/null -X POST -H "Authorization: token $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
-update_github_status "pending" "Pinnning to IPFS cluster" "https://ipfs.io/"
+update_github_status "pending" "Pinnning to IPFS cluster" "$IPFS_GATEWAY"
 
 # check command works
 ipfs-cluster-ctl
 
 ipfs-cluster-ctl \
-    --host $HOST \
+    --host $CLUSTER_HOST \
     --basic-auth $CLUSTER_USER:$CLUSTER_PASSWORD \
     add \
     --quieter \
@@ -68,7 +68,7 @@ root_cid=$(ipfs-cluster-ctl \
     --name "$PIN_NAME" \
     --recursive $INPUT_DIR )
 
-preview_url="$GATEWAY_URL/ipfs/$root_cid"
+preview_url="$IPFS_GATEWAY/ipfs/$root_cid"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
 
