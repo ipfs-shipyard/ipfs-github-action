@@ -19,6 +19,16 @@ CLUSTER_PASSWORD="<boop>"
 GITHUB_TOKEN="<needs repo status scope>"
 ```
 
+You can optionally overrider the following
+
+```sh
+# Multiaddr for the ipfs cluster to pin your site to
+CLUSTER_HOST="/dnsaddr/cluster.ipfs.io"
+
+# URL for the gateway to use for the site preview url
+IPFS_GATEWAY="https://ipfs.io"
+```
+
 ## Contribute
 
 Feel free to dive in! [Open an issue](https://github.com/ipfs-shipyard/ipfs-action/issues/new) or submit PRs.
