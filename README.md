@@ -6,6 +6,9 @@ Publish websites to IPFS as part of a github action workflow. This action pins a
 
 This action uses https://github.com/ipfs-shipyard/ipfs-dns-deploy to do the work.
 
+**NOTE** You need to provide credentials to an IPFS cluster instance that you have permission to pin to, in order to make use of this action.
+
+
 ## Inputs
 
 ### `path_to_add`
