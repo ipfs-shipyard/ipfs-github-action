@@ -56,4 +56,4 @@ preview_url="$GATEWAY_URL/ipfs/$root_cid"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
 
-echo "$root_cid"
+echo "::set-output name=cid::$root_cid"

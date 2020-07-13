@@ -1,33 +1,36 @@
-# GitHub Action for IPFS
+# IPFS GitHub Action
 
-> Pin your site to IPFS via the ipfs-cluster-ctl command
+Publish websites to IPFS as part of a github action workflow. This action pins a directory to IPFS by using the ipfs-cluster-ctl command to pin it to a remote IPFS Cluster.
 
 ![screenshot](screenshot.png)
 
-This image uses:
+This action uses https://github.com/ipfs-shipyard/ipfs-dns-deploy to do the work.
 
-- [`ipfs-cluster-ctl`] - Pin the site root to our IPFS Cluster
-- [`entrypoint.sh`] - The script to tie it all together
+## Inputs
 
-## Requirements
+### `path_to_add`
 
-The following environment variables should be set
+**Required** The path the root directory of your static website or other content that you want to publish to IPFS.
 
-```sh
-CLUSTER_USER="<beep>"
-CLUSTER_PASSWORD="<boop>"
-GITHUB_TOKEN="<needs repo status scope>"
-```
+### `cluster_user`
 
-You can optionally overrider the following
+**Required** Username for the IPFS Cluster instance
 
-```sh
-# Multiaddr for the ipfs cluster to pin your site to
-CLUSTER_HOST="/dnsaddr/cluster.ipfs.io"
+### `cluster_password`
 
-# URL for the gateway to use for the site preview url
-IPFS_GATEWAY="https://ipfs.io"
-```
+**Required** Password for the IPFS Cluster instance
+
+### `cluster_host`
+
+**Required** Multiaddr for the IPFS Cluster. 
+_Default_ `/dnsaddr/cluster.ipfs.io`
+
+## Outputs
+
+### `cid`
+
+The IPFS content identifier for the directory on IPFS. You fetch your site via IPFS at `https://<cid>.ipfs.dweb.link`
+
 
 ## Contribute
 
