@@ -2,6 +2,7 @@
 set -e
 
 echo "Pinning $1 to $CLUSTER_HOST"
+ls -la "$1"
 
 if [[ $# -eq 0 ]] ; then
   echo 'Usage:'
