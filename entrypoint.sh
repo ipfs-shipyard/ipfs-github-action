@@ -2,6 +2,7 @@
 set -e
 
 echo "Pinning $1 to $CLUSTER_HOST"
+echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 echo "pwd $(pwd)"
 ls -la "$1"
 
