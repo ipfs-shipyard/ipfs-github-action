@@ -10,7 +10,7 @@ set -e
 #   exit 1
 # fi
 
-# interpolate env vars in the path, see: 
+
 # INPUT_DIR=$(sh -c "echo $1")
 # CLUSTER_USER=$2
 # CLUSTER_PASSWORD=$3
@@ -18,7 +18,8 @@ set -e
 # IPFS_GATEWAY=$5
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
 
-INPUT_DIR="$INPUT_PATH_TO_ADD"
+# interpolate env vars in the $INPUT_PATH_TO_ADD, see: https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#entrypoint
+INPUT_DIR=$(sh -c "echo $INPUT_PATH_TO_ADD")
 echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 echo "GITHUB_REPOSITORY is $GITHUB_REPOSITORY"
