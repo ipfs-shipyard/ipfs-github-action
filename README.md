@@ -2,11 +2,11 @@
 
 Publish websites to IPFS as part of a github action workflow. This action pins a directory to IPFS by using the ipfs-cluster-ctl command to pin it to a remote IPFS Cluster.
 
-![screenshot](screenshot.png)
-
 This action uses https://github.com/ipfs-shipyard/ipfs-dns-deploy to do the work.
 
 **NOTE** You need to provide credentials to an IPFS cluster instance that you have permission to pin to, in order to make use of this action.
+
+![screenshot](screenshot.png)
 
 
 ## Inputs
