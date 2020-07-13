@@ -1,23 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ $# -eq 0 ]] ; then
-  echo 'Usage:'
-  echo 'CLUSTER_USER="who" \'
-  echo 'CLUSTER_PASSWORD="_secret_" \'
-  echo 'CLUSTER_HOST="/dnsaddr/cluster.ipfs.io" \'
-  echo 'IPFS_GATEWAY="https://ipfs.io"'
-  echo 'GITHUB_REPOSITORY="ipfs-shipyard/ipld-explorer" \'
-  echo 'GITHUB_SHA="bf3aae3bc98666fbf459b03ab2d87a97505bfab0" \'
-  echo 'GITHUB_TOKEN="_secret" \'
-  echo './entrypoint.sh <input root dir to pin recursivly>'
-  exit 1
-fi
-
-INPUT_DIR=$1
+# Interpolate env vars in the $INPUT_PATH_TO_ADD, see: https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#entrypoint
+# This handles situation where user provides path to add as $GITHUB_WORKSPACE/some/path
+INPUT_DIR=$(sh -c "echo $INPUT_PATH_TO_ADD")
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
-HOST=${CLUSTER_HOST:-"/dnsaddr/cluster.ipfs.io"}
-GATEWAY_URL=${IPFS_GATEWAY:-"https://ipfs.io"}
+
+echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 
 update_github_status () {
   # only try and update the satus if we have a github token
@@ -41,19 +30,21 @@ update_github_status () {
   curl --silent --output /dev/null -X POST -H "Authorization: token $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
-update_github_status "pending" "Pinnning to IPFS cluster" "https://ipfs.io/"
+update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
 
 # pin to cluster
 root_cid=$(ipfs-cluster-ctl \
-    --host $HOST \
-    --basic-auth $CLUSTER_USER:$CLUSTER_PASSWORD \
+    --host "$INPUT_CLUSTER_HOST" \
+    --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
     add \
     --quieter \
     --name "$PIN_NAME" \
-    --recursive $INPUT_DIR )
+    --recursive "$INPUT_DIR" )
 
-preview_url="$GATEWAY_URL/ipfs/$root_cid"
+preview_url="$INPUT_IPFS_GATEWAY/ipfs/$root_cid"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
+
+echo "Pinned to IPFS - $preview_url"
 
 echo "::set-output name=cid::$root_cid"

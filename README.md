@@ -25,6 +25,11 @@ This action uses https://github.com/ipfs-shipyard/ipfs-dns-deploy to do the work
 **Required** Multiaddr for the IPFS Cluster. 
 _Default_ `/dnsaddr/cluster.ipfs.io`
 
+### `ipfs_gateway`
+
+**Required** URL for the IPFS gateway to use in the preview link
+_Default_ `https://ipfs.io`
+
 ## Outputs
 
 ### `cid`
