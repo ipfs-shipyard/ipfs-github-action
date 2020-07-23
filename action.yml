@@ -20,8 +20,8 @@ inputs:
     default: '/dnsaddr/cluster.ipfs.io'
     required: true
   ipfs_gateway:
-    description: 'IPFS Gateway to use for preview url'
-    default: 'https://ipfs.io'
+    description: 'IPFS subdomain gateway to use for preview url'
+    default: 'dweb.link'
     required: true
 outputs:
   cid:

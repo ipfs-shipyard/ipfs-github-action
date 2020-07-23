@@ -38,13 +38,17 @@ root_cid=$(ipfs-cluster-ctl \
     --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
     add \
     --quieter \
+    --local \
+    --cid-version 1 \
     --name "$PIN_NAME" \
     --recursive "$INPUT_DIR" )
 
-preview_url="$INPUT_IPFS_GATEWAY/ipfs/$root_cid"
+preview_url="https://$root_cid.ipfs.$INPUT_IPFS_GATEWAY"
 
 update_github_status "success" "Website added to IPFS" "$preview_url"
 
 echo "Pinned to IPFS - $preview_url"
 
 echo "::set-output name=cid::$root_cid"
+
+echo "::set-output name=url::$preview_url"
