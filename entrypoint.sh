@@ -50,3 +50,5 @@ update_github_status "success" "Website added to IPFS" "$preview_url"
 echo "Pinned to IPFS - $preview_url"
 
 echo "::set-output name=cid::$root_cid"
+
+echo "::set-output name=url::$preview_url"
