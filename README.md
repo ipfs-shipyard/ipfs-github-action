@@ -30,8 +30,8 @@ _Default_ `/dnsaddr/cluster.ipfs.io`
 
 ### `ipfs_gateway`
 
-**Required** URL for the IPFS gateway to use in the preview link
-_Default_ `https://ipfs.io`
+**Required** IPFS subdomain gateway to use for preview url
+_Default_ `dweb.link`
 
 ## Outputs
 
