@@ -11,6 +11,7 @@ echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 update_github_status () {
   # only try and update the satus if we have a github token
   if [ -z "$GITHUB_TOKEN" ] ; then
+    echo "Not setting status. No GITHUB_TOKEN set"
     return 0
   fi
 
@@ -27,7 +28,7 @@ update_github_status () {
     --arg context "$CONTEXT" \
     '{ state: $state, target_url: $target_url, description: $description, context: $context }' )
 
-  curl --silent --output /dev/null -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
+  curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
 update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
