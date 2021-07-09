@@ -31,7 +31,7 @@ update_github_status () {
   curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
-update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
+update_github_status "pending" "Pinnning to IPFS cluster" "https://$INPUT_IPFS_GATEWAY"
 
 # pin to cluster
 root_cid=$(ipfs-cluster-ctl \
