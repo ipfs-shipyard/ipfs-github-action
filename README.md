@@ -61,6 +61,8 @@ If you'd prefer to use `/ipfs/<cid>` style preview urls, then v1 of this action 
 
 see: https://github.com/ipfs-shipyard/ipfs-github-action/releases/tag/v1.0.0
 
+- Must be the hostname without a scheme prefix. e.g dweb.link not https://dweb.link
+- Links in commit status messages will be prefixed with https. http is not supported; GitHub prevents the `target_url` property from using http urls.
 
 ## Outputs
 

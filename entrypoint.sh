@@ -2,7 +2,7 @@
 set -e
 
 # Interpolate env vars in the $INPUT_PATH_TO_ADD, see: https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#entrypoint
-# This handles situation where user provides path to add as $GITHUB_WORKSPACE/some/path
+# This handles situation where user provides path to add as $GITHUB_WORKSPACE/some/path
 INPUT_DIR=$(sh -c "echo $INPUT_PATH_TO_ADD")
 PIN_NAME="https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
 
@@ -11,6 +11,7 @@ echo "Pinning $INPUT_DIR to $INPUT_CLUSTER_HOST"
 update_github_status () {
   # only try and update the satus if we have a github token
   if [ -z "$GITHUB_TOKEN" ] ; then
+    echo "Not setting status. No GITHUB_TOKEN set"
     return 0
   fi
 
@@ -27,10 +28,10 @@ update_github_status () {
     --arg context "$CONTEXT" \
     '{ state: $state, target_url: $target_url, description: $description, context: $context }' )
 
-  curl --silent --output /dev/null -X POST -H "Authorization: token $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
+  curl --output /dev/null --silent --show-error -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' --data "$params" $STATUS_API_URL
 }
 
-update_github_status "pending" "Pinnning to IPFS cluster" "$INPUT_IPFS_GATEWAY"
+update_github_status "pending" "Pinnning to IPFS cluster" "https://$INPUT_IPFS_GATEWAY"
 
 # pin to cluster
 root_cid=$(ipfs-cluster-ctl \
@@ -39,13 +40,14 @@ root_cid=$(ipfs-cluster-ctl \
     add \
     --quieter \
     --local \
+    --wait \
     --cid-version 1 \
     --name "$PIN_NAME" \
     --recursive "$INPUT_DIR" )
 
 preview_url="https://$root_cid.ipfs.$INPUT_IPFS_GATEWAY"
 
-update_github_status "success" "Website added to IPFS" "$preview_url"
+update_github_status "success" "View on IPFS" "$preview_url"
 
 echo "Pinned to IPFS - $preview_url"
 
