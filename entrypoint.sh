@@ -56,6 +56,12 @@ else
         --recursive "$INPUT_DIR" )
 fi
 
+# error when error or missing or empty CID
+if [[ $root_cid == *error* ]] || [[ -z "${root_cid// }" ]] ; then
+    >&2 echo "Error: CID returned by the cluster is >$root_cid<"
+    exit 1
+fi
+
 preview_url="https://$root_cid.ipfs.$INPUT_IPFS_GATEWAY"
 
 update_github_status "success" "View on IPFS" "$preview_url"
