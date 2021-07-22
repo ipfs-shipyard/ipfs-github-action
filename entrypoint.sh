@@ -35,13 +35,14 @@ update_github_status "pending" "Pinnning to IPFS cluster" "https://$INPUT_IPFS_G
 
 if [[ $INPUT_DIR == /ipfs/* ]] || [[ $INPUT_DIR == /ipns/* ]] ; then
     # if path is already an absolute content path just pin over IPFS
-    root_cid=$(ipfs-cluster-ctl \
+    ipfs-cluster-ctl \
         --host "$INPUT_CLUSTER_HOST" \
         --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
         pin add \
         --wait \
         --name "$PIN_NAME" \
-        "$INPUT_DIR" | head -1 | cut -d: -f1)
+        "$INPUT_DIR" | tee /tmp/pin-log
+    root_cid=$(head -1 /tmp/pin-log | cut -d: -f1)
 else
     # add dir to cluster
     root_cid=$(ipfs-cluster-ctl \
