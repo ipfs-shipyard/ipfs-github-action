@@ -51,6 +51,6 @@ update_github_status "success" "View on IPFS" "$preview_url"
 
 echo "Pinned to IPFS - $preview_url"
 
-echo "::set-output name=cid::$root_cid"
+echo "cid=$root_cid" >> $GITHUB_OUTPUT
 
-echo "::set-output name=url::$preview_url"
+echo "url=$preview_url" >> $GITHUB_OUTPUT
