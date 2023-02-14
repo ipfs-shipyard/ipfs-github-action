@@ -33,17 +33,35 @@ update_github_status () {
 
 update_github_status "pending" "Pinnning to IPFS cluster" "https://$INPUT_IPFS_GATEWAY"
 
-# pin to cluster
-root_cid=$(ipfs-cluster-ctl \
-    --host "$INPUT_CLUSTER_HOST" \
-    --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
-    add \
-    --quieter \
-    --local \
-    --wait \
-    --cid-version 1 \
-    --name "$PIN_NAME" \
-    --recursive "$INPUT_DIR" )
+if [[ $INPUT_DIR == /ipfs/* ]] || [[ $INPUT_DIR == /ipns/* ]] ; then
+    # if path is already an absolute content path just pin over IPFS
+    ipfs-cluster-ctl \
+        --host "$INPUT_CLUSTER_HOST" \
+        --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
+        pin add \
+        --wait \
+        --name "$PIN_NAME" \
+        "$INPUT_DIR" | tee /tmp/pin-log
+    root_cid=$(head -1 /tmp/pin-log | cut -d: -f1)
+else
+    # add dir to cluster
+    root_cid=$(ipfs-cluster-ctl \
+        --host "$INPUT_CLUSTER_HOST" \
+        --basic-auth "$INPUT_CLUSTER_USER:$INPUT_CLUSTER_PASSWORD" \
+        add \
+        --quieter \
+        --local \
+        --wait \
+        --cid-version 1 \
+        --name "$PIN_NAME" \
+        --recursive "$INPUT_DIR" )
+fi
+
+# error when error or missing or empty CID
+if [[ $root_cid == *error* ]] || [[ -z "${root_cid// }" ]] ; then
+    >&2 echo "Error: CID returned by the cluster is >$root_cid<"
+    exit 1
+fi
 
 preview_url="https://$root_cid.ipfs.$INPUT_IPFS_GATEWAY"
 

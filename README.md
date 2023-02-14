@@ -37,7 +37,7 @@ Check the [filecoin spec website workflow](https://github.com/filecoin-project/s
 
 ### `path_to_add`
 
-**Required** The path the root directory of your static website or other content that you want to publish to IPFS.
+**Required** The path the root directory of your static website or other content that you want to publish to IPFS. If the path is absolute content path (eg. `/ipfs/{cid}`) then action will fetch and pin using IPFS.
 
 ### `cluster_user`
 
