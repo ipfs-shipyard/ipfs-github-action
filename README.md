@@ -1,6 +1,6 @@
-# IPFS GitHub Action
+# IPFS Cluster GitHub Action
 
-Publish websites to IPFS as part of a github action workflow. This action pins a directory to IPFS by using the ipfs-cluster-ctl command to pin it to a remote IPFS Cluster. It sets the IPFS URL as a status on the commit that triggered the action, allowing easy previewing of rendered static sites on the dweb.
+Publish websites to IPFS Cluster as part of a github action workflow. This action pins a directory to IPFS by using the ipfs-cluster-ctl command to pin it to a remote IPFS Cluster. It sets the IPFS URL as a status on the commit that triggered the action, allowing easy previewing of rendered static sites on the dweb.
 
 **NOTE:** You need to provide **credentials to an IPFS cluster** instance that you have permission to pin to, in order to make use of this action.
 
