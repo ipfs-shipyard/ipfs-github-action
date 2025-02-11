@@ -1,5 +1,5 @@
 # action.yml
-name: 'Add to IPFS'
+name: 'Add to IPFS Cluster'
 description: 'Pin a directory to an IPFS Cluster'
 author: olizilla
 branding:
