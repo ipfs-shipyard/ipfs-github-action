@@ -1,6 +1,6 @@
 > [!CAUTION]
 > # ⛔️ Deprecation Warning
-> This GitHub Action is deprecated and no longer maintained. Use [**`ipfs-deploy-acton`**](https://github.com/ipfs/ipfs-deploy-action) instead, which has similar functionality and supports IPFS Cluster, Kubo, and other pinning services.
+> This GitHub Action is deprecated and no longer maintained. Use [**`ipfs-deploy-acton`**](https://github.com/ipfs/ipfs-deploy-action) instead, which has similar functionality and supports [IPFS Cluster](https://github.com/ipfs-cluster/ipfs-cluster/#readme), [Kubo](https://github.com/ipfs/kubo#readme), and other pinning services.
 
 ## IPFS Cluster GitHub Action
 
