@@ -1,4 +1,8 @@
-# IPFS Cluster GitHub Action
+> [!CAUTION]
+> # ⛔️ Deprecation Warning
+> This GitHub Action is deprecated and no longer maintained. Use [**`ipfs-deploy-acton`**](https://github.com/ipfs/ipfs-deploy-action) instead, which has similar functionality and supports [IPFS Cluster](https://github.com/ipfs-cluster/ipfs-cluster/#readme), [Kubo](https://github.com/ipfs/kubo#readme), and other pinning services.
+
+## IPFS Cluster GitHub Action
 
 Publish websites to [IPFS Cluster](https://ipfscluster.io/) as part of a Github Action workflow. This action pins a directory to IPFS by using the ipfs-cluster-ctl command to pin it to a remote IPFS Cluster. It sets the IPFS URL as a status on the commit that triggered the action, allowing easy previewing of rendered static sites on the dweb.
 
